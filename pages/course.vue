@@ -1,14 +1,14 @@
 <template>
-  <div
-      class="p-12 bg-gray-100 w-full h-full min-h-screen flex flex-col items-center"
-  >
-    <div class="prose mb-12">
-      <h1>
+  <div>
+    <div
+        class="mb-4 flex justify-between items-center w-full"
+    >
+      <h1 class="text-3xl">
         <span class="font-medium">
-          Course:
-          <span class="font-bold">Mastering Nuxt 3</span>
+          <span class="font-bold">{{ title }}</span>
         </span>
       </h1>
+      <user-card />
     </div>
 
     <div class="flex flex-row justify-center flex-grow">
@@ -41,7 +41,23 @@
       </div>
 
       <div class="prose p-12 bg-white rounded-md w-[65ch]">
-        <NuxtPage/>
+        <NuxtErrorBoundary>
+          <NuxtPage/>
+          <template #error="{ error }">
+            <p>
+              Oh no, something went wrong with the lesson!
+              <code>{{ error }}</code>
+            </p>
+            <p>
+              <button
+                  class="hover:cursor-pointer bg-gray-500 text-white font-bold"
+                  @click="resetError( error)"
+              >
+                Reset
+              </button>
+            </p>
+          </template>
+        </NuxtErrorBoundary>
       </div>
     </div>
   </div>
@@ -50,5 +66,6 @@
 
 <script lang="ts" setup>
 
-const { chapters } = useCourse();
+const { chapters, title } = useCourse();
+
 </script>

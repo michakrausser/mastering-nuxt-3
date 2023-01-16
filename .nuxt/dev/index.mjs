@@ -5,7 +5,7 @@ import { join } from 'path';
 import { mkdirSync } from 'fs';
 import { parentPort, threadId } from 'worker_threads';
 import { provider, isWindows } from 'file:///Users/michakrausser/Webstorm/mastering-nuxt-3/node_modules/std-env/dist/index.mjs';
-import { eventHandler, setHeaders, sendRedirect, defineEventHandler, handleCacheHeaders, createEvent, getRequestHeader, createApp, createRouter as createRouter$1, lazyEventHandler, toNodeListener, getQuery, writeEarlyHints } from 'file:///Users/michakrausser/Webstorm/mastering-nuxt-3/node_modules/h3/dist/index.mjs';
+import { eventHandler, setHeaders, sendRedirect, defineEventHandler, handleCacheHeaders, createEvent, getRequestHeader, assertMethod, readBody, setCookie, createApp, createRouter as createRouter$1, lazyEventHandler, toNodeListener, getQuery, writeEarlyHints } from 'file:///Users/michakrausser/Webstorm/mastering-nuxt-3/node_modules/h3/dist/index.mjs';
 import { renderResourceHeaders, createRenderer } from 'file:///Users/michakrausser/Webstorm/mastering-nuxt-3/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import devalue from 'file:///Users/michakrausser/Webstorm/mastering-nuxt-3/node_modules/@nuxt/devalue/dist/devalue.mjs';
 import { renderToString } from 'file:///Users/michakrausser/Webstorm/mastering-nuxt-3/node_modules/vue/server-renderer/index.mjs';
@@ -21,7 +21,7 @@ import unstorage_47drivers_47fs from 'file:///Users/michakrausser/Webstorm/maste
 import defu from 'file:///Users/michakrausser/Webstorm/mastering-nuxt-3/node_modules/defu/dist/defu.mjs';
 import { toRouteMatcher, createRouter } from 'file:///Users/michakrausser/Webstorm/mastering-nuxt-3/node_modules/radix3/dist/index.mjs';
 
-const _runtimeConfig = {"app":{"baseURL":"/","buildAssetsDir":"/_nuxt/","cdnURL":""},"nitro":{"routeRules":{"/__nuxt_error":{"cache":false}},"envPrefix":"NUXT_"},"public":{}};
+const _runtimeConfig = {"app":{"baseURL":"/","buildAssetsDir":"/_nuxt/","cdnURL":""},"nitro":{"routeRules":{"/__nuxt_error":{"cache":false}},"envPrefix":"NUXT_"},"public":{"supabase":{"url":"https://buliczaxzuxbdwdcaylo.supabase.co","key":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1bGljemF4enV4YmR3ZGNheWxvIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzA5NzQ1NDUsImV4cCI6MTk4NjU1MDU0NX0.66eXPHKnJqNu2ASLBYIN9f6afgdBYrJuzMb4DD_LoMA","client":{},"redirect":false,"cookies":{"name":"sb","lifetime":28800,"domain":"","path":"/","sameSite":"lax"}}},"supabase":{}};
 const ENV_PREFIX = "NITRO_";
 const ENV_PREFIX_ALT = _runtimeConfig.nitro.envPrefix ?? process.env.NITRO_ENV_PREFIX ?? "_";
 const getEnv = (key) => {
@@ -46,8 +46,8 @@ function overrideConfig(obj, parentKey = "") {
   }
 }
 overrideConfig(_runtimeConfig);
-const config$1 = deepFreeze(_runtimeConfig);
-const useRuntimeConfig = () => config$1;
+const config$2 = deepFreeze(_runtimeConfig);
+const useRuntimeConfig = () => config$2;
 function deepFreeze(object) {
   const propNames = Object.getOwnPropertyNames(object);
   for (const name of propNames) {
@@ -129,8 +129,8 @@ function defineRenderHandler(handler) {
   });
 }
 
-const config = useRuntimeConfig();
-const _routeRulesMatcher = toRouteMatcher(createRouter({ routes: config.nitro.routeRules }));
+const config$1 = useRuntimeConfig();
+const _routeRulesMatcher = toRouteMatcher(createRouter({ routes: config$1.nitro.routeRules }));
 function createRouteRulesHandler() {
   return eventHandler((event) => {
     const routeRules = getRouteRules(event);
@@ -441,10 +441,55 @@ const errorHandler = (async function errorhandler(error, event) {
   event.res.end(html);
 });
 
+const config = useRuntimeConfig().public;
+const _toAS4V = defineEventHandler(async (event) => {
+  assertMethod(event, "POST");
+  const body = await readBody(event);
+  const cookieOptions = config.supabase.cookies;
+  const { event: signEvent, session } = body;
+  if (!event) {
+    throw new Error("Auth event missing!");
+  }
+  if (signEvent === "SIGNED_IN" || signEvent === "TOKEN_REFRESHED") {
+    if (!session) {
+      throw new Error("Auth session missing!");
+    }
+    setCookie(
+      event,
+      `${cookieOptions.name}-access-token`,
+      session.access_token,
+      {
+        domain: cookieOptions.domain,
+        maxAge: cookieOptions.lifetime ?? 0,
+        path: cookieOptions.path,
+        sameSite: cookieOptions.sameSite
+      }
+    );
+    setCookie(event, `${cookieOptions.name}-refresh-token`, session.refresh_token, {
+      domain: cookieOptions.domain,
+      maxAge: cookieOptions.lifetime ?? 0,
+      path: cookieOptions.path,
+      sameSite: cookieOptions.sameSite
+    });
+  }
+  if (signEvent === "SIGNED_OUT") {
+    setCookie(event, `${cookieOptions.name}-access-token`, "", {
+      maxAge: -1,
+      path: cookieOptions.path
+    });
+    setCookie(event, `${cookieOptions.name}-refresh-token`, "", {
+      maxAge: -1,
+      path: cookieOptions.path
+    });
+  }
+  return "auth cookie set";
+});
+
 const _lazy_ytnx5Q = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
   { route: '/__nuxt_error', handler: _lazy_ytnx5Q, lazy: true, middleware: false, method: undefined },
+  { route: '/api/_supabase/session', handler: _toAS4V, lazy: false, middleware: false, method: undefined },
   { route: '/**', handler: _lazy_ytnx5Q, lazy: true, middleware: false, method: undefined }
 ];
 

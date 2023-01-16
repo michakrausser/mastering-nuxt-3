@@ -2,6 +2,7 @@
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     'LessonCompleteButton': typeof import("../components/LessonCompleteButton.client.vue")['default']
+    'UserCard': typeof import("../components/UserCard.vue")['default']
     'VideoPlayer': typeof import("../components/VideoPlayer.vue")['default']
     'NuxtWelcome': typeof import("../node_modules/@nuxt/ui-templates/dist/templates/welcome.vue")['default']
     'NuxtLayout': typeof import("../node_modules/nuxt/dist/app/components/layout")['default']
@@ -23,6 +24,7 @@ declare module '@vue/runtime-core' {
     'Body': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
     'LessonCompleteButton': typeof import("../node_modules/nuxt/dist/app/components/server-placeholder")['default']
     'LazyLessonCompleteButton': typeof import("../components/LessonCompleteButton.client.vue")['default']
+    'LazyUserCard': typeof import("../components/UserCard.vue")['default']
     'LazyVideoPlayer': typeof import("../components/VideoPlayer.vue")['default']
     'LazyNuxtWelcome': typeof import("../node_modules/@nuxt/ui-templates/dist/templates/welcome.vue")['default']
     'LazyNuxtLayout': typeof import("../node_modules/nuxt/dist/app/components/layout")['default']
@@ -47,6 +49,7 @@ declare module '@vue/runtime-core' {
 }
 
 export const LessonCompleteButton: typeof import("../components/LessonCompleteButton.client.vue")['default']
+export const UserCard: typeof import("../components/UserCard.vue")['default']
 export const VideoPlayer: typeof import("../components/VideoPlayer.vue")['default']
 export const NuxtWelcome: typeof import("../node_modules/@nuxt/ui-templates/dist/templates/welcome.vue")['default']
 export const NuxtLayout: typeof import("../node_modules/nuxt/dist/app/components/layout")['default']
@@ -68,6 +71,7 @@ export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/compone
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
 export const LessonCompleteButton: typeof import("../node_modules/nuxt/dist/app/components/server-placeholder")['default']
 export const LazyLessonCompleteButton: typeof import("../components/LessonCompleteButton.client.vue")['default']
+export const LazyUserCard: typeof import("../components/UserCard.vue")['default']
 export const LazyVideoPlayer: typeof import("../components/VideoPlayer.vue")['default']
 export const LazyNuxtWelcome: typeof import("../node_modules/@nuxt/ui-templates/dist/templates/welcome.vue")['default']
 export const LazyNuxtLayout: typeof import("../node_modules/nuxt/dist/app/components/layout")['default']
