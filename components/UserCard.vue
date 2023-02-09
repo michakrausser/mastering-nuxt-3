@@ -45,8 +45,6 @@ const logout = async () => {
 
 const name = computed( () => user.value?.user_metadata.full_name )
 
-console.log( 'user: ', user.value );
-
 const profile = computed( () => user.value?.user_metadata.avatar_url )
 
 </script>

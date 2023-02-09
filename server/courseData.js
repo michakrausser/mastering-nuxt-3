@@ -30,7 +30,7 @@ We also answer the question: “Are there any cases when you wouldn’t want to 
         },
         {
           title: 'Typing Component Events',
-          slug: '3-typing-components-events',
+          slug: '3-typing-component-events',
           number: 3,
           downloadUrl:
             'https://vueschool.io/lessons/typing-component-events',
@@ -60,7 +60,7 @@ We also answer the question: “Are there any cases when you wouldn’t want to 
         },
         {
           title: 'Declaring and Typing Component Props',
-          slug: '2-declaring-and-typing-components-props',
+          slug: '2-declaring-and-typing-component-props',
           number: 2,
           downloadUrl:
             'https://vueschool.io/lessons/declaring-and-typing-component-props',
@@ -80,7 +80,7 @@ We also answer the question: “Are there any cases when you wouldn’t want to 
         },
         {
           title: 'Typing Component Events',
-          slug: '4-typing-components-events',
+          slug: '4-typing-component-events',
           number: 4,
           downloadUrl:
             'https://vueschool.io/lessons/typing-component-events',
@@ -110,7 +110,7 @@ We also answer the question: “Are there any cases when you wouldn’t want to 
         },
         {
           title: 'Declaring and Typing Component Props',
-          slug: '2-declaring-and-typing-components-props',
+          slug: '2-declaring-and-typing-component-props',
           number: 2,
           downloadUrl:
             'https://vueschool.io/lessons/declaring-and-typing-component-props',
@@ -130,7 +130,7 @@ We also answer the question: “Are there any cases when you wouldn’t want to 
         },
         {
           title: 'Typing Component Events',
-          slug: '4-typing-components-events',
+          slug: '4-typing-component-events',
           number: 4,
           downloadUrl:
             'https://vueschool.io/lessons/typing-component-events',

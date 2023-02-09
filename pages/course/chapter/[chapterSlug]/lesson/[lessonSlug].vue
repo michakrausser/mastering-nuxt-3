@@ -29,7 +29,7 @@
         :videoId="lesson.videoId"
     />
 
-    <p>{{ lesson.text }}</p>
+    <p class="my-4">{{ lesson.text }}</p>
 
     <LessonCompleteButton
         :model-value="isLessonComplete"
@@ -40,15 +40,17 @@
 
 <script setup>
 
-const course = useCourse()
+const course = await useCourse()
 const route = useRoute()
+const { chapterSlug, lessonSlug } = route.params
+const lesson = await useLesson( chapterSlug, lessonSlug )
 
 definePageMeta({
   middleware: [
-    function({ params }, from ) {
-      const course = useCourse()
-      const chapter = course.chapters.find(
-          ( chapter ) => chapter.slug === params.chapterSlug
+    async function({ params }, from ) {
+      const course = await useCourse()
+      const chapter = course.value.chapters.find(
+          chapter => chapter.slug === params.chapterSlug
       )
       if ( !chapter ) {
         return abortNavigation(
@@ -59,7 +61,7 @@ definePageMeta({
         )
       }
       const lesson = chapter.lessons.find(
-          ( lesson ) => lesson.slug === params.lessonSlug
+          lesson => lesson.slug === params.lessonSlug
       )
       if ( !lesson ) {
         return abortNavigation(
@@ -75,16 +77,14 @@ definePageMeta({
 })
 
 const chapter = computed( () => {
-  return course.chapters.find( chapter => chapter.slug === route.params.chapterSlug )
-})
-
-const lesson = computed( () => {
-  return chapter.value.lessons.find( lesson => lesson.slug === route.params.lessonSlug )
+  return course.value.chapters.find( chapter => chapter.slug === route.params.chapterSlug )
 })
 
 const title = computed( () => {
-  return `${ lesson.value.title } - ${ course.title }`
+  return `${ lesson.value.title } - ${ course.value.title }`
 })
+
+useHead({ title })
 
 const progress = useLocalStorage( 'progress', [] )
 
@@ -100,10 +100,6 @@ const toggleComplete = () => {
   }
   progress.value[ chapter.value.number - 1 ][ lesson.value.number - 1 ] = !isLessonComplete.value;
 }
-
-useHead({
-  title
-})
 </script>
 
 <style scoped>
