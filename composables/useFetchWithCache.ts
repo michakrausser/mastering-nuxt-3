@@ -12,7 +12,10 @@ export default async <T>( url: string ) => {
   });
 
   if ( !cached.value ) {
-    const { data, error } = await useFetch<T>( url, { initialCache: false } );
+    const { data, error } = await useFetch<T>( url, {
+      initialCache: false,
+      headers: useRequestHeaders(['cookie'])
+    });
 
     if ( error.value ) {
       throw createError( {
@@ -25,6 +28,8 @@ export default async <T>( url: string ) => {
   } else {
     console.log( `Getting value from cache for ${ url }` );
   }
+
+  console.log( 'cached: ', cached );
 
   return cached;
 };

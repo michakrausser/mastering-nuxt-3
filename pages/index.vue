@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
       class="underline font-medium"
-      :href="firstLesson.path"
+      :to="firstLesson.path"
   >
     Go to first lesson
   </NuxtLink>
@@ -9,4 +9,5 @@
 
 <script setup lang="ts">
 const firstLesson = await useFirstLesson();
+console.log( firstLesson );
 </script>
